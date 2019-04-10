@@ -1,25 +1,17 @@
-# mdx-deck basic template
+# iterators-and-generators
 
-This was generated with [mdx-deck][]'s `npm init deck` command.
+Доклад на тему "Итераторы и генераторы в JavaScript"  
+Выполнил Красильников Роман
 
-## Development
+## Запуск
 
-To run the presentation deck in development mode:
+1. `npm install`
+2. `npm start`
 
-```sh
-npm start
-```
+Презентация будет доступна по адресу: http://127.0.0.1:8080
 
-Edit the [`deck.mdx`](deck.mdx) file to get started.
+## Экспорт
+* `HTML`: `npm build`
+* `PDF`: `npm pdf`
 
-## Exporting
-
-To build the presentation deck as static HTML:
-
-```sh
-npm run build
-```
-
-For more documentation see the [mdx-deck][] repo.
-
-[mdx-deck]: https://github.com/jxnblk/mdx-deck
+Файлы будут лежать в директории `data-structures/dist`

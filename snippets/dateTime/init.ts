@@ -32,12 +32,14 @@ function * years ({ year }: Years) {
     yield { year: year++ }
   }
 }
+
 function * months ({ month }: Months, { year }: Years) {
   while (month < 12) {
     yield { month: month++, year }
   }
   return { month: month % 12, year }
 }
+
 function * days ({ day }: Days, { month, year }: Months) {
   const len = getMonthLength(year, month)
   while (day < len) {
@@ -45,12 +47,14 @@ function * days ({ day }: Days, { month, year }: Months) {
   }
   return { day: day % len, month, year }
 }
+
 function * hours ({ hour }: Hours, date: Days) {
   while (hour < 24) {
     yield { hour: hour++, ...date }
   }
   return { hour: hour % 24, ...date }
 }
+
 function * minutes ({ minute }: Minutes, date: Hours) {
   while (minute < 60) {
     yield { minute: minute++, ...date }
@@ -64,7 +68,7 @@ export default (from: Minutes, to: Minutes) => {
     || day < to.day
     || hour < to.hour
     || minute <= to.minute
-  const period = wrap(
+  const iterator = wrap(
     decorate<Hours, Minutes>(
       decorate<Days, Hours>(
         decorate<Months, Days>(
@@ -80,5 +84,5 @@ export default (from: Minutes, to: Minutes) => {
     ),
     condition
   )
-  return period(from)
+  return iterator(from)
 }

@@ -1,14 +1,13 @@
-import { Interpreter, THandler } from '../interpreter';
+import { Interpreter, THandler } from './interpreter';
 
 
-function getMonthLength (year: number, month: number) {
-  // tslint:disable-next-line:no-bitwise
-  return month === 2 ? year & 3 || !(year % 25) && year & 15 ? 28 : 29 : 30 + (month + (month >> 3) & 1);
+function getMonthLength(year: number, month: number) {
+  return new Date(year, month + 1, 0).getDate()
 }
 
 class DatePart {
 
-  constructor (
+  constructor(
     public value: number,
     public limitNames: string[] = [],
     private step: number,
@@ -16,8 +15,16 @@ class DatePart {
     private limit = (() => Number.MAX_VALUE),
   ) { }
 
-  public next (value?: number) {
-    this.value += value ? (value % this.step ? Math.ceil(value / this.step) * this.step : value) : this.step;
+  public next(value?: number) {
+    if (value) {
+      if (value % this.step) {
+        this.value = Math.ceil(value / this.step) * this.step
+      } else {
+        this.value += value
+      }
+    } else {
+      this.value = this.step
+    }
     const limit = this.limit();
     if (this.value < limit) {
       return 0;
@@ -27,7 +34,7 @@ class DatePart {
     return count;
   }
 
-  get available (): boolean {
+  get available(): boolean {
     return this.handler();
   }
 
@@ -52,14 +59,18 @@ export class DateTime {
   private interpreter: Interpreter = new Interpreter(this.input, this.out);
   private handler: THandler;
 
-  constructor (from: Date, end: Date, constraints: IConstraints) {
+  constructor(from: Date, end: Date, constraints: IConstraints) {
     const dateParts = [
       { name: 'year', get: (date: Date) => date.getFullYear() },
-      { name: 'month', get: (date: Date) => date.getMonth(), limit: () => 12, limitNames: ['year'] },
+      {
+        name: 'month',
+        get: (date: Date) => date.getMonth(),
+        limit: () => 12, limitNames: ['year'] },
       {
         name: 'date',
         get: (date: Date) => date.getDate(),
-        limit: () => getMonthLength(this.get('year'), this.get('month')), limitNames: ['month'],
+        limit: () => getMonthLength(this.get('year'), this.get('month')),
+        limitNames: ['month'],
       },
       {
         name: 'week',
@@ -71,9 +82,23 @@ export class DateTime {
           return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
         },
       },
-      { name: 'day', get: (date: Date) => date.getDay(), limit: () => 7, limitNames: ['week'] },
-      { name: 'hour', get: (date: Date) => date.getHours(), limit: () => 24, limitNames: ['day', 'date'] },
-      { name: 'minute', get: (date: Date) => date.getMinutes(), limit: () => 60, limitNames: ['hour'] },
+      {
+        name: 'day',
+        get: (date: Date) => date.getDay(),
+        limit: () => 7,
+        limitNames: ['week']
+      },
+      {
+        name: 'hour',
+        get: (date: Date) => date.getHours(),
+        limit: () => 24,
+        limitNames: ['day', 'date']
+      },
+      {
+        name: 'minute',
+        get: (date: Date) => date.getMinutes(),
+        limit: () => 60, limitNames: ['hour']
+      },
     ];
     for (const { name, get, limit, limitNames } of dateParts) {
       let step: number = 1;
@@ -92,7 +117,7 @@ export class DateTime {
     this.handler = this.interpreter.toHandler([end, 'before']);
   }
 
-  public next (level: RuleRise, name: string, value?: number): any {
+  public next(level: RuleRise, name: string, value?: number): any {
     const part = this.parts[name];
     const count = part.next(value);
     let flag = true;
@@ -108,11 +133,11 @@ export class DateTime {
     return flag && part.available;
   }
 
-  public get (name: string) {
+  public get(name: string) {
     return this.parts[name].value;
   }
 
-  get available (): boolean {
+  get available(): boolean {
     return this.handler();
   }
 

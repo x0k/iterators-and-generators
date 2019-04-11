@@ -1,7 +1,15 @@
 import { CodeSurfer } from 'mdx-deck-code-surfer'
 import Code from 'mdx-code';
 import nightOwl from 'prism-react-renderer/themes/nightOwl'
+
+import initItearator from '!raw-loader!./snippets/iterator/init.js'
+import createItrerator from '!raw-loader!./snippets/iterator/create.js'
+
+import initGenerator from '!raw-loader!./snippets/generator/init.js'
+
 import legacy from '!raw-loader!./snippets/dateTime/legacy.ts'
+import initDateTime from '!raw-loader!./snippets/dateTime/init.ts'
+import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
 
 #### <Report\>
 # Итераторы и генераторы
@@ -12,14 +20,197 @@ import legacy from '!raw-loader!./snippets/dateTime/legacy.ts'
 ---
 
 # Iterators
-## Symbol.iterator
+## [Symbol.iterator]
+
+---
+
+<CodeSurfer 
+  title="Easy"
+  code={initItearator}
+  theme={nightOwl}
+  lang="javascript"
+  steps={[
+    { range: [1, 2], notes: 'Где живет итератор' },
+    { range: [3, 13], notes: 'Применение итератора' }
+  ]}
+/>
+
+---
+
+<CodeSurfer 
+  title="Medium"
+  code={createItrerator}
+  theme={nightOwl}
+  lang="javascript"
+  notes="123"
+/>
+
+---
+
+# Generators
+## function*
 
 ---
 
 <CodeSurfer
-  title="Объявление"
+  title="Medium"
+  code={initGenerator}
+  lang="javascript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 17] }
+  ]}
+/>
+
+---
+
+# Task
+## real use
+
+---
+
+<CodeSurfer
+  title="Don't try this at home"
   code={legacy}
   lang="typescript"
-  showNumbers
   theme={nightOwl}
+  steps={[
+    { range: [1, 7] },
+    { range: [8, 41], notes: 'Кусок даты' },
+    { range: [63, 102], notes: 'Определение логик итерации' },
+    { range: [103, 117], notes: 'Инициализация' },
+    { range: [120, 142], notes: 'Методы итерации' }
+  ]}
 />
+
+---
+
+<CodeSurfer
+  title="Medium"
+  code={initDateTime}
+  lang="typescript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 28], notes: 'Определение структуры' },
+    { range: [30, 63], notes: 'Определение логик итерации' },
+    { range: [65, 88], notes: 'Собираем' }
+  ]}
+/>
+
+---
+
+<CodeSurfer
+  title="Hard"
+  code={wrapper}
+  lang="typescript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 29] },
+    { range: [17, 29] },
+    { range: [1, 15] }
+  ]}
+/>
+
+---
+
+export default Code
+
+```
+const decorate = (iterable, wrapper) =>
+function * (initialValue) {
+  let value = initialValue
+  for (const item of iterable(initialValue)) {
+    value = yield * wrapper(value, item)
+  }
+  return value
+}
+
+const wrap = (iterable, available) => function * (value) {
+  const iterator = iterable(value)
+  let item = iterator.next()
+  while (!item.done && available(item.value)) {
+    yield item.value
+    item = iterator.next()
+  }
+  return item.value
+}
+
+function getMonthLength (year, month) {
+  return new Date(year, month + 1, 0).getDate()
+}
+
+function * years ({ year }) {
+  while (true) {
+    yield { year: year++ }
+  }
+}
+
+function * months ({ month }, { year }) {
+  while (month < 12) {
+    yield { month: month++, year }
+  }
+  return { month: month % 12, year }
+}
+
+function * days ({ day }, { month, year }) {
+  const len = getMonthLength(year, month)
+  while (day < len) {
+    yield { day: day++, month, year }
+  }
+  return { day: day % len, month, year }
+}
+
+function * hours ({ hour }, date) {
+  while (hour < 24) {
+    yield { hour: hour++, ...date }
+  }
+  return { hour: hour % 24, ...date }
+}
+
+function * minutes ({ minute }, date) {
+  while (minute < 60) {
+    yield { minute: minute++, ...date }
+  }
+  return { minute: minute % 60, ...date }
+}
+
+function dateTime (from, to) {
+  const condition = ({ year, month, day, hour, minute }) => year < to.year
+    || month < to.month
+    || day < to.day
+    || hour < to.hour
+    || minute <= to.minute
+  const iterator = wrap(
+    decorate(
+      decorate(
+        decorate(
+          decorate(
+            years,
+            months
+          ),
+          days
+        ),
+        hours
+      ),
+      minutes
+    ),
+    condition
+  )
+  return iterator(from)
+}
+```
+```javascript
+  const from = { year: 1999, month: 11, day: 30, hour: 23, minute: 57 }
+  const to = { year: 2000, month: 0, day: 0, hour: 0, minute: 3 }
+  for (const item of dateTime(from, to)) {
+    console.log(item)
+  }
+```
+
+---
+
+# Красильнков Роман
+
+#### Итераторы и генераторы JavaScript
+
+#### </Report\>

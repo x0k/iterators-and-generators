@@ -25,42 +25,54 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
 ---
 
 <CodeSurfer 
-  title="Easy"
+  title="Итератор массива"
   code={initItearator}
   theme={nightOwl}
   lang="javascript"
   steps={[
-    { range: [1, 2], notes: 'Где живет итератор' },
-    { range: [3, 13], notes: 'Применение итератора' }
+    { range: [1, 3], notes: 'easy' },
+    { range: [5, 15], notes: 'easy' },
+    { range: [17, 19], notes: 'easy' }
   ]}
 />
 
 ---
 
 <CodeSurfer 
-  title="Medium"
+  title="Собственный итератор"
   code={createItrerator}
   theme={nightOwl}
   lang="javascript"
-  notes="123"
+  notes="easy"
 />
 
 ---
 
 # Generators
-## function*
+## function *
 
 ---
 
 <CodeSurfer
-  title="Medium"
+  title="Введение в генераторы"
   code={initGenerator}
   lang="javascript"
   theme={nightOwl}
-  steps={[
-    { range: [1, 17] }
-  ]}
 />
+
+---
+
+# Роли генераторов
+
+* Итераторы
+
+* Обсерверы
+
+* Сопрограммы
+
+---
+
+
 
 ---
 
@@ -81,6 +93,7 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
     { range: [103, 117], notes: 'Инициализация' },
     { range: [120, 142], notes: 'Методы итерации' }
   ]}
+  notes="Don't try this at home"
 />
 
 ---
@@ -95,6 +108,7 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
     { range: [30, 63], notes: 'Определение логик итерации' },
     { range: [65, 88], notes: 'Собираем' }
   ]}
+  notes="normal"
 />
 
 ---
@@ -109,6 +123,7 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
     { range: [17, 29] },
     { range: [1, 15] }
   ]}
+  notes="hard"
 />
 
 ---

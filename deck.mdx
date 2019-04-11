@@ -1,25 +1,25 @@
-import { Head, Notes } from 'mdx-deck'
-
-import { CodeSurfer } from "mdx-deck-code-surfer"
+import { CodeSurfer } from 'mdx-deck-code-surfer'
 import Code from 'mdx-code';
-import nightOwl from "prism-react-renderer/themes/nightOwl"
+import nightOwl from 'prism-react-renderer/themes/nightOwl'
+import legacy from '!raw-loader!./snippets/dateTime/legacy.ts'
 
-<Head>
-  <title>Presentation Title</title>
-</Head>
+#### <Report\>
+# Итераторы и генераторы
+# JavaScript
 
-# Hello
-
----
-
-## Edit this file
-
-To create your presentation
-
-<Notes>
-Create speaker notes with the Notes component
-</Notes>
+#### Красильнков Роман
 
 ---
 
-<https://github.com/jxnblk/mdx-deck>
+# Iterators
+## Symbol.iterator
+
+---
+
+<CodeSurfer
+  title="Объявление"
+  code={legacy}
+  lang="typescript"
+  showNumbers
+  theme={nightOwl}
+/>

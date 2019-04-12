@@ -5,7 +5,7 @@ import nightOwl from 'prism-react-renderer/themes/nightOwl'
 import initItearator from '!raw-loader!./snippets/iterator/init.js'
 import createItrerator from '!raw-loader!./snippets/iterator/create.js'
 
-import initGenerator from '!raw-loader!./snippets/generator/init.js'
+import generatorIterator from '!raw-loader!./snippets/generator/iterator.js'
 
 import legacy from '!raw-loader!./snippets/dateTime/legacy.ts'
 import initDateTime from '!raw-loader!./snippets/dateTime/init.ts'
@@ -30,9 +30,9 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
   theme={nightOwl}
   lang="javascript"
   steps={[
-    { range: [1, 3], notes: 'easy' },
-    { range: [5, 15], notes: 'easy' },
-    { range: [17, 19], notes: 'easy' }
+    { range: [1, 3] },
+    { range: [5, 15] },
+    { range: [17, 19] }
   ]}
 />
 
@@ -43,22 +43,12 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
   code={createItrerator}
   theme={nightOwl}
   lang="javascript"
-  notes="easy"
 />
 
 ---
 
 # Generators
 ## function *
-
----
-
-<CodeSurfer
-  title="Введение в генераторы"
-  code={initGenerator}
-  lang="javascript"
-  theme={nightOwl}
-/>
 
 ---
 
@@ -69,6 +59,54 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
 * Обсерверы
 
 * Сопрограммы
+
+---
+
+<CodeSurfer
+  title="Итератор"
+  code={generatorIterator}
+  lang="javascript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 11], notes: 'интерфейс' },
+    { range: [13, 23] }
+  ]}
+/>
+
+---
+
+<CodeSurfer
+  title="Обсервер"
+  code={generatorIterator}
+  lang="javascript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 11], notes: 'интерфейс' },
+    { range: [13, 23] }
+  ]}
+/>
+
+---
+
+```typescript
+interface Observer {
+   next(value?: any): void;
+   return(value?: any): void;
+  throw(error): void;
+}
+```
+
+```typescript
+interface Generator {
+    next(value? : any) : IteratorResult;
+    throw(value? : any) : IteratorResult;
+    return(value? : any) : IteratorResult;
+}
+interface IteratorResult {
+    value : any;
+    done : boolean;
+}
+```
 
 ---
 

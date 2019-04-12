@@ -20,4 +20,13 @@ function * range (from, to, step = 1) {
 }
 
 const items = [...range(1, 6, 2)]
-items // [1, 3, 5]
+items // [ 1, 3, 5 ]
+
+function * foo (from, to) {
+  for (const i of range(from, to)) {
+    yield * range(from, i + 1)
+  }
+}
+
+const items2 = [...foo(1, 4)]
+items2 // [ 1, 1, 2, 1, 2, 3 ]

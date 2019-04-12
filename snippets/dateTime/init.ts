@@ -1,4 +1,4 @@
-import { decorate, wrap } from './wrapper'
+import { decorate, wrap } from 'iterator-wrapper'
 
 function getMonthLength (year: number, month: number) {
   return new Date(year, month + 1, 0).getDate()
@@ -63,11 +63,11 @@ function * minutes ({ minute }: Minutes, date: Hours) {
 }
 
 export default (from: Minutes, to: Minutes) => {
-  const condition = ({ year, month, day, hour, minute }: Minutes) => year < to.year
-    || month < to.month
-    || day < to.day
-    || hour < to.hour
-    || minute <= to.minute
+  const condition = ({ year, month, day, hour, minute }: Minutes) => year < to.year ||
+    month < to.month ||
+    day < to.day ||
+    hour < to.hour ||
+    minute <= to.minute
   const iterator = wrap(
     decorate<Hours, Minutes>(
       decorate<Days, Hours>(

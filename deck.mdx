@@ -1,3 +1,4 @@
+import { Image, Appear } from 'mdx-deck'
 import { CodeSurfer } from 'mdx-deck-code-surfer'
 import Code from 'mdx-code';
 import nightOwl from 'prism-react-renderer/themes/nightOwl'
@@ -6,10 +7,13 @@ import initItearator from '!raw-loader!./snippets/iterator/init.js'
 import createItrerator from '!raw-loader!./snippets/iterator/create.js'
 
 import generatorIterator from '!raw-loader!./snippets/generator/iterator.js'
+import generatorObserver from '!raw-loader!./snippets/generator/observer.js'
+import generatorCoroutine from '!raw-loader!./snippets/generator/coroutine.js'
 
 import legacy from '!raw-loader!./snippets/dateTime/legacy.ts'
 import initDateTime from '!raw-loader!./snippets/dateTime/init.ts'
 import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
+import explaining from '!raw-loader!./snippets/dateTime/explaining.js'
 
 #### <Report\>
 # Итераторы и генераторы
@@ -19,7 +23,7 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
 
 ---
 
-# Iterators
+# Итераторы
 ## [Symbol.iterator]
 
 ---
@@ -47,18 +51,18 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
 
 ---
 
-# Generators
+# Генераторы
 ## function *
 
 ---
 
 # Роли генераторов
 
-* Итераторы
+* Итераторы (Iterators)
 
-* Обсерверы
+* Наблюдатели (Observers)
 
-* Сопрограммы
+* Сопрограммы (Coroutines)
 
 ---
 
@@ -69,75 +73,40 @@ import wrapper from '!raw-loader!./snippets/dateTime/wrapper.ts'
   theme={nightOwl}
   steps={[
     { range: [1, 11], notes: 'интерфейс' },
-    { range: [13, 23] }
+    { range: [13, 23] },
+    { range: [25, 32] }
   ]}
 />
 
 ---
 
-<CodeSurfer
-  title="Обсервер"
-  code={generatorIterator}
-  lang="javascript"
-  theme={nightOwl}
-  steps={[
-    { range: [1, 11], notes: 'интерфейс' },
-    { range: [13, 23] }
-  ]}
-/>
+# Задача
 
----
-
-```typescript
-interface Observer {
-   next(value?: any): void;
-   return(value?: any): void;
-  throw(error): void;
-}
-```
-
-```typescript
-interface Generator {
-    next(value? : any) : IteratorResult;
-    throw(value? : any) : IteratorResult;
-    return(value? : any) : IteratorResult;
-}
-interface IteratorResult {
-    value : any;
-    done : boolean;
-}
-```
-
----
-
-
-
----
-
-# Task
-## real use
+* Проитерировать временной промежуток
+* Управление шагом итерации
+* Управление углубиной итерации
+* Фильтрация интерируемых значений
 
 ---
 
 <CodeSurfer
-  title="Don't try this at home"
+  title="Решение"
   code={legacy}
   lang="typescript"
   theme={nightOwl}
   steps={[
-    { range: [1, 7] },
+    { range: [1, 7], notes: 'Don\'t try this at home' },
     { range: [8, 41], notes: 'Кусок даты' },
     { range: [63, 102], notes: 'Определение логик итерации' },
     { range: [103, 117], notes: 'Инициализация' },
     { range: [120, 142], notes: 'Методы итерации' }
   ]}
-  notes="Don't try this at home"
 />
 
 ---
 
 <CodeSurfer
-  title="Medium"
+  title="Решение с использование генераторов"
   code={initDateTime}
   lang="typescript"
   theme={nightOwl}
@@ -152,16 +121,24 @@ interface IteratorResult {
 ---
 
 <CodeSurfer
-  title="Hard"
+  title={'"Магические" функции'}
   code={wrapper}
   lang="typescript"
   theme={nightOwl}
   steps={[
     { range: [1, 29] },
-    { range: [17, 29] },
-    { range: [1, 15] }
+    { range: [17, 29], notes: '' },
+    { range: [1, 15], notes: '' }
   ]}
-  notes="hard"
+/>
+
+---
+
+<CodeSurfer
+  title={'Логическое представление'}
+  code={explaining}
+  lang="javascript"
+  theme={nightOwl}
 />
 
 ---
@@ -253,7 +230,7 @@ function dateTime (from, to) {
 }
 ```
 ```javascript
-  const from = { year: 1999, month: 11, day: 30, hour: 23, minute: 57 }
+  const from = { year: 1999, month: 11, day: 30, hour: 23, minute: 58 }
   const to = { year: 2000, month: 0, day: 0, hour: 0, minute: 3 }
   for (const item of dateTime(from, to)) {
     console.log(item)
@@ -267,3 +244,33 @@ function dateTime (from, to) {
 #### Итераторы и генераторы JavaScript
 
 #### </Report\>
+
+---
+
+<CodeSurfer
+  title="Наблюдатель"
+  code={generatorObserver}
+  lang="javascript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 5], notes: 'интерфейс' },
+    { range: [7, 20], notes: 'чтение файла' },
+    { range: [22, 43], notes: 'разделение на строки' },
+    { range: [45, 55], notes: 'нумерация строк' },
+    { range: [57, 62], notes: 'вывод в консоль' },
+    { range: [64, 81], notes: 'объединение генераторов' }
+  ]}
+/>
+
+---
+
+<CodeSurfer
+  title="Сопрограмма"
+  code={generatorCoroutine}
+  lang="javascript"
+  theme={nightOwl}
+  steps={[
+    { range: [1, 11], notes: 'интерфейс' },
+    { range: [13, 23] }
+  ]}
+/>
